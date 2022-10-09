@@ -18,7 +18,7 @@ const Login = () => {
     dispatch({ type: "login" });
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/v1/login",
+        "https://demo-server-lokesh.herokuapp.com/api/login",
         { email, password },
         {
           withCredentials: true,
@@ -31,7 +31,7 @@ const Login = () => {
       toast.success("LogIn Successfull", {
         position: toast.POSITION.TOP_RIGHT,
       });
-      const { user,token  } = data;
+      const { user, token } = data;
       const { firstName, lastName } = user;
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("token", token);

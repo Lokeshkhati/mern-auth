@@ -7,7 +7,7 @@ const Profile = () => {
 
   const getUserDetails = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/v1/profile", {
+      const { data } = await axios.get("https://demo-server-lokesh.herokuapp.com/api/profile", {
         headers: {
           "Content-Type": "application/json",
           // @ts-ignore

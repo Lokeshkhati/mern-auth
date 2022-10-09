@@ -15,7 +15,7 @@ const SignUp = () => {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/v1/register",
+        "https://demo-server-lokesh.herokuapp.com/api/register",
         {
           firstName,
           lastName,
