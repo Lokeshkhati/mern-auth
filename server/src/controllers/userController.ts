@@ -89,7 +89,7 @@ exports.forgotPassword = async (req: Request, res: Response, next: NextFunction)
     const forgotPasswordToken = user.getForgotPasswordToken()
     await user.save({ validateBeforeSave: false })
 
-    const resetUrl = `http://localhost:3000/resetpassword/${forgotPasswordToken}`
+    const resetUrl = `https://mern-auth-seven.vercel.app/resetpassword/${forgotPasswordToken}`
 
     // `Copy paste this link in your URL and hit Enter\n\n${resetUrl}`
     const message =
