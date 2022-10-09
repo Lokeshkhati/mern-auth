@@ -37,7 +37,6 @@ exports.register = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
-
 exports.login = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body
 
@@ -67,7 +66,6 @@ exports.login = async (req: Request, res: Response, next: NextFunction) => {
         console.log(error)
     }
 }
-
 
 exports.logout = async (req: Request, res: Response) => {
     res.cookie('token', null, {
@@ -174,4 +172,5 @@ exports.getLoggedInUserDetails = async (req: RequestUserId, res: Response, next:
         user
     })
 }
+
 

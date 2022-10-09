@@ -62,15 +62,7 @@ userSchema.methods.getJwtToken = function () {
         expiresIn: process.env.JWT_EXPIRY
     })
 
-    // const accessToken = jwt.sign({ id: this._id }, process.env.ACCESS_TOKEN_SECRET_KEY, {
-    //     expiresIn: '24h'
-    // })
-    // const refreshToken = jwt.sign({ id: this._id }, process.env.REFRESH_TOKEN_SECRET_KEY, {
-    //     expiresIn: '30d'
-    // })
-    // return {
-    //     accessToken, refreshToken
-    // }
+    
 }
 // generate forgot password  token (string)
 userSchema.methods.getForgotPasswordToken = function () {

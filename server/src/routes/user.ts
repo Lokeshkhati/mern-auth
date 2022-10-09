@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router()
 
-const { register, login, logout, forgotPassword, resetPassword, getLoggedInUserDetails } = require('../controllers/userController')
+const { register, login, logout, forgotPassword, resetPassword, getLoggedInUserDetails, } = require('../controllers/userController')
 const { isLoggedIn } = require('../middlewares/user')
 
 router.route('/register').post(register)

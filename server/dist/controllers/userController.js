@@ -12,12 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const User = require('../models/user');
 const CustomError = require('../utils/customError');
 const cookieToken = require('../utils/cookieToken');
-exports.signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const mailHelper = require('../utils/emailHelper');
+const crypto = require('crypto');
+exports.register = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { firstName, lastName, email, password } = req.body;
     if (!email || !firstName || !lastName || !password) {
         return next(new CustomError('FirstName, LastName, Email and Password are required', 400));
     }
     try {
+        // const UserExists = await User.findOne({ email })
+        // if (UserExists) {
+        //     return next(new CustomError("User with given email already exists"))
+        // }
         const user = yield User.create({
             firstName,
             lastName,
@@ -56,7 +62,7 @@ exports.login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         console.log(error);
     }
 });
-exports.logout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.cookie('token', null, {
         expires: new Date(Date.now()),
         httpOnly: true
@@ -64,5 +70,77 @@ exports.logout = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     res.status(200).json({
         success: true,
         message: "Logout success"
+    });
+});
+exports.forgotPassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.body;
+    const user = yield User.findOne({ email });
+    if (!user) {
+        return next(new CustomError('Email not found as registered', 400));
+    }
+    const forgotPasswordToken = user.getForgotPasswordToken();
+    yield user.save({ validateBeforeSave: false });
+    const resetUrl = `http://localhost:3000/resetpassword/${forgotPasswordToken}`;
+    // `Copy paste this link in your URL and hit Enter\n\n${resetUrl}`
+    const message = ` You have requested for a password reset\n\n
+    Please go through this link to reset your  password.\n\n
+    ${resetUrl}`;
+    try {
+        yield mailHelper({
+            email: user.email,
+            subject: "Password reset request",
+            message
+        });
+        res.status(200).json({
+            success: true,
+            message: "Email sent successfully"
+        });
+    }
+    catch (error) {
+        user.forgotPasswordToken = undefined;
+        user.forgotPasswordExpiry = undefined;
+        yield user.save({ validateBeforeSave: false });
+        return next(new CustomError(error.message, 500));
+    }
+});
+exports.resetPassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    // grab token
+    const resetToken = req.params.id;
+    console.log(resetToken);
+    // encrypt the token
+    const encryptedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    try {
+        // find User using encryptedToken and expiry time
+        const user = yield User.findOne({
+            encryptedToken, forgotPasswordExpiry: ({
+                $gt: Date.now()
+            })
+        });
+        if (!user) {
+            return next(new CustomError("Token is invalid or expired", 400));
+        }
+        const { password, confirmPassword } = req.body;
+        // if (req.body.password !== req.body.confirmPassword) {
+        //     return next(new CustomError("Password and Confirm password do not match"))
+        // }
+        if (password !== confirmPassword) {
+            return next(new CustomError("Password and Confirm password do not match"));
+        }
+        user.password = password;
+        user.forgotPasswordToken = undefined;
+        user.forgotPasswordExpiry = undefined;
+        yield user.save();
+        // send the token to frontend
+        cookieToken(user, res);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getLoggedInUserDetails = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield User.findById(req.user.id);
+    res.status(200).json({
+        success: true,
+        user
     });
 });

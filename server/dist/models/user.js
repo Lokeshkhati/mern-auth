@@ -63,7 +63,7 @@ userSchema.pre('save', function (next) {
         }
     });
 });
-// validate the password wih passed on user password
+// validate the password with passed on user password
 userSchema.methods.isValidatedPassword = function (usersendPassword) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield bcrypt.compare(usersendPassword, this.password);
@@ -85,13 +85,4 @@ userSchema.methods.getForgotPasswordToken = function () {
     this.forgotPasswordExpiry = Date.now() + 20 * 60 * 1000;
     return forgotToken;
 };
-// virtual for fullName
-// userSchema.virtual('fullName')
-//     .get(function () {
-//         return `${this.firstName} ${this.lastName}`;
-//     })
-//     .set(function (fullName: string) {
-//         const [firstName, lastName] = fullName.split(' ');
-//         this.set({ firstName, lastName });
-//     });
 module.exports = mongoose_1.default.model('User', userSchema);
