@@ -15,7 +15,7 @@ const SignUp = () => {
 
     try {
       const { data } = await axios.post(
-        "https://demo-server-lokesh.herokuapp.com/api/register",
+        `${process.env.REACT_APP_ENDPOINT}/api/register`,
         {
           firstName,
           lastName,
@@ -142,16 +142,3 @@ const SignUp = () => {
 };
 
 export default SignUp;
-
-
-
-
-
-
-
-
-
-
-
-
-

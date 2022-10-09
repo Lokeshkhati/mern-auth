@@ -18,7 +18,7 @@ const Login = () => {
     dispatch({ type: "login" });
     try {
       const { data } = await axios.post(
-        "https://demo-server-lokesh.herokuapp.com/api/login",
+        `${process.env.REACT_APP_ENDPOINT}/api/login`,
         { email, password },
         {
           withCredentials: true,

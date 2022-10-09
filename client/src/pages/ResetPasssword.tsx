@@ -22,7 +22,7 @@ const ResetPasssword = () => {
     }
     try {
       const { data } = await axios.put(
-        `https://demo-server-lokesh.herokuapp.com/api/resetpassword/${id}`,
+        `${process.env.REACT_APP_ENDPOINT}/api/resetpassword/${id}`,
         { password, confirmPassword },
         {
           withCredentials: true,

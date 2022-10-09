@@ -7,13 +7,16 @@ const Profile = () => {
 
   const getUserDetails = async () => {
     try {
-      const { data } = await axios.get("https://demo-server-lokesh.herokuapp.com/api/profile", {
-        headers: {
-          "Content-Type": "application/json",
-          // @ts-ignore
-          Authorization: localStorage.getItem("token"),
-        },
-      });
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_ENDPOINT}/api/profile`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            // @ts-ignore
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
 
       const { user } = data;
       const { firstName, lastName, email } = user;

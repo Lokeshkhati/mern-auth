@@ -12,7 +12,7 @@ const ForgotPassword = () => {
     setIsLoading(true);
     try {
       const { data } = await axios.post(
-        "https://demo-server-lokesh.herokuapp.com/api/forgotpassword",
+        `${process.env.REACT_APP_ENDPOINT}/api/forgotpassword`,
         { email },
         {
           withCredentials: true,
