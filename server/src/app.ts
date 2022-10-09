@@ -20,7 +20,6 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 
-// import all routes here
 const user = require('./routes/user')
 
 // router middleware
